@@ -1,3 +1,4 @@
+const qrcode = require('qrcode-terminal');
 const {
   makeWASocket,
   useMultiFileAuthState,
@@ -26,8 +27,8 @@ async function startBot() {
     const { connection, lastDisconnect, qr } = update;
 
     if (qr) {
-      console.log("\n🔐 Scan this QR with your WhatsApp:");
-      console.log(qr);
+      console.log("\n🔐 Scan this QR with your WhatsApp mobile app:");
+      qrcode.generate(qr, { small: true });
     }
 
     if (connection === "close") {
@@ -37,7 +38,7 @@ async function startBot() {
         console.log("❌ Bot logged out. Delete auth_info and re-authenticate.");
       } else {
         console.log("🔁 Connection closed. Reconnecting...");
-        startBot(); // Retry
+        startBot();
       }
     }
 

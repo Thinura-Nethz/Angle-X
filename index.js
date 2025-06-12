@@ -1,64 +1,50 @@
-const qrcode = require("qrcode-terminal");
-const {
-  makeWASocket,
-  useMultiFileAuthState,
-  fetchLatestBaileysVersion,
-  DisconnectReason,
-  makeCacheableSignalKeyStore,
-} = require("@whiskeysockets/baileys");
-const { Boom } = require("@hapi/boom");
-const fs = require("fs");
+sock.ev.on("messages.upsert", async ({ messages }) => {
+  const msg = messages[0];
+  if (!msg.message) return;
 
-async function startBot() {
-  const { state, saveCreds } = await useMultiFileAuthState("auth_info");
+  const sender = msg.key.remoteJid;
+  const text = msg.message.conversation || msg.message.extendedTextMessage?.text;
 
-  // Fetch WA Web version (array)
-  const { version } = await fetchLatestBaileysVersion();
+  if (!text) return;
 
-  const sock = makeWASocket({
-    version,  // make sure this is array of numbers
-    auth: {
-      creds: state.creds,
-      keys: makeCacheableSignalKeyStore(state.keys, fs),
-    },
-    browser: ["Ubuntu", "Chrome", "22.04.4"],
-  });
+  const command = text.trim().toLowerCase();
 
-  sock.ev.on("creds.update", saveCreds);
+  switch (command) {
+    case "!hi":
+      await sock.sendMessage(sender, {
+        text: "👋 Hello! I'm Angle X. How can I assist you?",
+      });
+      break;
 
-  sock.ev.on("connection.update", (update) => {
-    const { connection, lastDisconnect, qr } = update;
+    case "!about":
+      await sock.sendMessage(sender, {
+        text: "🤖 Angle X is a WhatsApp bot built using Baileys library by Thinura.",
+      });
+      break;
 
-    if (qr) {
-      console.log("\n🔐 Scan this QR with your WhatsApp mobile app:");
-      qrcode.generate(qr, { small: true });
-    }
+    case "!owner":
+      await sock.sendMessage(sender, {
+        text: "👤 Bot Owner: Thinura\n📞 Contact: +94 77 457 1418",
+      });
+      break;
 
-    if (connection === "close") {
-      const reason = new Boom(lastDisconnect?.error)?.output?.statusCode;
+    case "!help":
+      await sock.sendMessage(sender, {
+        text:
+          "📖 *Angle X Command List:*\n" +
+          "• `!hi` - Say hello\n" +
+          "• `!about` - Learn about the bot\n" +
+          "• `!owner` - Get owner contact\n" +
+          "• `!help` - Show this help menu",
+      });
+      break;
 
-      if (reason === DisconnectReason.loggedOut) {
-        console.log("❌ Bot logged out. Delete auth_info and re-authenticate.");
-      } else {
-        console.log("🔁 Connection closed. Reconnecting...");
-        startBot();
+    default:
+      if (command.startsWith("!")) {
+        await sock.sendMessage(sender, {
+          text: "❓ Unknown command. Type `!help` to see available commands.",
+        });
       }
-    }
-
-    if (connection === "open") {
-      console.log("✅ Angle X is connected to WhatsApp!");
-    }
-  });
-
-  sock.ev.on("messages.upsert", async ({ messages }) => {
-    const msg = messages[0];
-    if (!msg.message) return;
-
-    const text = msg.message.conversation || msg.message.extendedTextMessage?.text;
-    if (text?.toLowerCase() === "hi") {
-      await sock.sendMessage(msg.key.remoteJid, { text: "Hello! I'm Angle X 🤖" });
-    }
-  });
-}
-
-startBot();
+      break;
+  }
+});

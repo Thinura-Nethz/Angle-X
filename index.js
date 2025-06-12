@@ -1,21 +1,37 @@
+const qrcode = require("qrcode-terminal");
 const pino = require("pino");
+const {
+  makeWASocket,
+  useMultiFileAuthState,
+  fetchLatestBaileysVersion,
+  DisconnectReason,
+  makeCacheableSignalKeyStore,
+} = require("@whiskeysockets/baileys");
+const { Boom } = require("@hapi/boom");
+const fs = require("fs");
 
-// Custom logger with trace method
-const logger = pino({ level: "info" });
-logger.trace = logger.debug;  // alias trace to debug
+async function startBot() {
+  // Auth info saved in folder 'auth_info'
+  const { state, saveCreds } = await useMultiFileAuthState("auth_info");
 
-const sock = makeWASocket({
-  version,
-  logger: logger,
-  auth: {
-    creds: state.creds,
-    keys: makeCacheableSignalKeyStore(state.keys, fs),
-  },
-  browser: ["Ubuntu", "Chrome", "22.04.4"],
-});
+  // Get the latest Baileys WhatsApp version
+  const { version } = await fetchLatestBaileysVersion();
 
+  // Create WhatsApp socket connection
+  const sock = makeWASocket({
+    version,
+    logger: pino({ level: "silent" }), // silent logger to avoid trace errors
+    auth: {
+      creds: state.creds,
+      keys: makeCacheableSignalKeyStore(state.keys, fs),
+    },
+    browser: ["Ubuntu", "Chrome", "22.04.4"],
+  });
+
+  // Save credentials when updated
   sock.ev.on("creds.update", saveCreds);
 
+  // Connection updates: QR code, connection closed/opened, etc
   sock.ev.on("connection.update", (update) => {
     const { connection, lastDisconnect, qr } = update;
 
@@ -25,10 +41,9 @@ const sock = makeWASocket({
     }
 
     if (connection === "close") {
-      const reason = new Boom(lastDisconnect?.error)?.output?.statusCode;
-
-      if (reason === DisconnectReason.loggedOut) {
-        console.log("❌ Bot logged out. Delete auth_info and re-authenticate.");
+      const statusCode = new Boom(lastDisconnect?.error)?.output?.statusCode;
+      if (statusCode === DisconnectReason.loggedOut) {
+        console.log("❌ Bot logged out. Delete 'auth_info' folder and re-authenticate.");
       } else {
         console.log("🔁 Connection closed. Reconnecting...");
         startBot();
@@ -40,6 +55,7 @@ const sock = makeWASocket({
     }
   });
 
+  // Message event listener
   sock.ev.on("messages.upsert", async ({ messages }) => {
     const msg = messages[0];
     if (!msg.message) return;
@@ -49,7 +65,7 @@ const sock = makeWASocket({
 
     if (!text) return;
 
-    // Command-style message
+    // Commands start with !
     if (text.startsWith("!")) {
       const command = text.slice(1).trim().toLowerCase();
 

@@ -1,29 +1,18 @@
-const qrcode = require("qrcode-terminal");
 const pino = require("pino");
-const {
-  makeWASocket,
-  useMultiFileAuthState,
-  fetchLatestBaileysVersion,
-  DisconnectReason,
-  makeCacheableSignalKeyStore,
-} = require("@whiskeysockets/baileys");
-const { Boom } = require("@hapi/boom");
-const fs = require("fs");
 
-async function startBot() {
-  const { state, saveCreds } = await useMultiFileAuthState("auth_info");
+// Custom logger with trace method
+const logger = pino({ level: "info" });
+logger.trace = logger.debug;  // alias trace to debug
 
-  const { version } = await fetchLatestBaileysVersion();
-
-  const sock = makeWASocket({
-    version,
-    logger: pino({ level: "silent" }), // Fix for logger.trace error
-    auth: {
-      creds: state.creds,
-      keys: makeCacheableSignalKeyStore(state.keys, fs),
-    },
-    browser: ["Ubuntu", "Chrome", "22.04.4"],
-  });
+const sock = makeWASocket({
+  version,
+  logger: logger,
+  auth: {
+    creds: state.creds,
+    keys: makeCacheableSignalKeyStore(state.keys, fs),
+  },
+  browser: ["Ubuntu", "Chrome", "22.04.4"],
+});
 
   sock.ev.on("creds.update", saveCreds);
 

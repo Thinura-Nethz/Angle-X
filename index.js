@@ -1,10 +1,10 @@
-const qrcode = require('qrcode-terminal');
+const qrcode = require("qrcode-terminal");
 const {
   makeWASocket,
   useMultiFileAuthState,
   fetchLatestBaileysVersion,
   DisconnectReason,
-  makeCacheableSignalKeyStore
+  makeCacheableSignalKeyStore,
 } = require("@whiskeysockets/baileys");
 const { Boom } = require("@hapi/boom");
 const fs = require("fs");
@@ -12,8 +12,11 @@ const fs = require("fs");
 async function startBot() {
   const { state, saveCreds } = await useMultiFileAuthState("auth_info");
 
+  // Fetch WA Web version (array)
+  const { version } = await fetchLatestBaileysVersion();
+
   const sock = makeWASocket({
-    version: await fetchLatestBaileysVersion(),
+    version,  // make sure this is array of numbers
     auth: {
       creds: state.creds,
       keys: makeCacheableSignalKeyStore(state.keys, fs),

@@ -5,12 +5,13 @@ cmd(
   {
     pattern: "menu",
     alise: ["getmenu"],
+    react:"📜",
     desc: "get cmd list",
     category: "main",
     filename: __filename,
   },
   async (
-    robin,
+    angle,
     mek,
     m,
     {
@@ -57,42 +58,42 @@ cmd(
         }
       }
 
-      let madeMenu = `👋 *Hello  ${pushname}*
+      let madeMenu = `👋 *Hello ${pushname}* *I'M AngleX Whatsapp Bot now i'm Ready to Assist You*
 
 
 | *MAIN COMMANDS* |
-    ▫️.alive
-    ▫️.menu
-    ▫️.ai <text>
-    ▫️.system
-    ▫️.owner
+    ▫️.alive 👀
+    ▫️.menu 📜
+    ▫️.ai <text> 😇
+    ▫️.system ⚡
+    ▫️.owner 🙄
 | *DOWNLOAD COMMANDS* |
-    ▫️.song <text>
-    ▫️.video <text>
-    ▫️.fb <link>
+    ▫️.song <text> 🎶
+    ▫️.video <text> 🎬 
+    ▫️.fb <link> 📘
 | *GROUP COMMANDS* |
 ${menu.group}
 | *OWNER COMMANDS* |
-    ▫️.restart
-    ▫️.update
+    ▫️.restart 🔁
+    ▫️.update ↪⏯
 | *CONVERT COMMANDS* |
-    ▫️.sticker <reply img>
-    ▫️.img <reply sticker>
-    ▫️.tr <lang><text>
-    ▫️.tts <text>
+    ▫️.sticker <reply img> 💨
+    ▫️.img <reply sticker> 🏷
+    ▫️.tr <lang><text> 🧬
+    ▫️.tts <text> ❄
 | *SEARCH COMMANDS* |
 ${menu.search}
 
 
-🥶𝐌𝐚𝐝𝐞 𝐛𝐲 𝐒_𝐈_𝐇_𝐈_𝐋_𝐄_𝐋🥶
+🥶Developer-Thinura_Nethz🥶
 
-> ROBIN MENU MSG
+> ANGLE-X MENU MSG
 `;
-      await robin.sendMessage(
+      await angle.sendMessage(
         from,
         {
           image: {
-            url: "https://raw.githubusercontent.com/Dark-Robin/Bot-Helper/refs/heads/main/autoimage/Bot%20robin%20menu.jpg",
+            url: "https://raw.githubusercontent.com/Thinura-Nethz/bot-img/refs/heads/main/ChatGPT%20Image%20Jun%2013%2C%202025%2C%2004_35_42%20PM.png",
           },
           caption: madeMenu,
         },

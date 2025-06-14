@@ -65,7 +65,7 @@ Developer- Thinura_Nethz
 `;
 
       // Send metadata thumbnail message
-      await angle.sendMessage(
+      await conn.sendMessage(
         from,
         { image: { url: data.thumbnail }, caption: desc },
         { quoted: mek }

@@ -11,7 +11,7 @@ cmd(
     filename: __filename,
   },
   async (
-    angle,
+    robin,
     mek,
     m,
     {
@@ -58,42 +58,42 @@ cmd(
         }
       }
 
-      let madeMenu = `👋 *Hello ${pushname}* *I'M AngleX Whatsapp Bot now i'm Ready to Assist You*
+      let madeMenu = `👋 *Hello  ${pushname}*
 
 
 | *MAIN COMMANDS* |
-    ▫️.alive 👀
-    ▫️.menu 📜
-    ▫️.ai <text> 😇
-    ▫️.system ⚡
-    ▫️.owner 🙄
+    ▫️.alive
+    ▫️.menu
+    ▫️.ai <text>
+    ▫️.system
+    ▫️.owner
 | *DOWNLOAD COMMANDS* |
-    ▫️.song <text> 🎶
-    ▫️.video <text> 🎬 
-    ▫️.fb <link> 📘
+    ▫️.song <text>
+    ▫️.video <text>
+    ▫️.fb <link>
 | *GROUP COMMANDS* |
 ${menu.group}
 | *OWNER COMMANDS* |
-    ▫️.restart 🔁
-    ▫️.update ↪⏯
+    ▫️.restart
+    ▫️.update
 | *CONVERT COMMANDS* |
-    ▫️.sticker <reply img> 💨
-    ▫️.img <reply sticker> 🏷
-    ▫️.tr <lang><text> 🧬
-    ▫️.tts <text> ❄
+    ▫️.sticker <reply img>
+    ▫️.img <reply sticker>
+    ▫️.tr <lang><text>
+    ▫️.tts <text>
 | *SEARCH COMMANDS* |
 ${menu.search}
 
 
-🥶Developer-Thinura_Nethz🥶
+🥶𝐌𝐚𝐝𝐞 𝐛𝐲 Thinura_SR🥶
 
-> ANGLE-X MENU MSG
+> ALPHA XD MENU MSG
 `;
-      await angle.sendMessage(
+      await robin.sendMessage(
         from,
         {
           image: {
-            url: "https://raw.githubusercontent.com/Thinura-Nethz/bot-img/refs/heads/main/ChatGPT%20Image%20Jun%2013%2C%202025%2C%2004_35_42%20PM.png",
+            url: "https://raw.githubusercontent.com/Thinura-Nethz/bot-img/refs/heads/main/ChatGPT%20Image%20Jun%206%2C%202025%2C%2005_39_56%20PM.png",
           },
           caption: madeMenu,
         },

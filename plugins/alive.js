@@ -4,6 +4,7 @@ const {cmd , commands} = require('../command')
 cmd({
     pattern: "alive",
     desc: "Check bot online or no.",
+    react:"👀",
     category: "main",
     filename: __filename
 },

@@ -65,11 +65,12 @@ Developer- Thinura_Nethz
 `;
 
       // Send metadata thumbnail message
-      await conn.sendMessage(
-        from,
-        { image: { url: data.thumbnail }, caption: desc },
-        { quoted: mek }
-      );
+await conn.sendMessage(
+  from,
+  { image: { url: data.thumbnail }, caption: desc },
+  { quoted: mek }
+);
+
 
       // Download the audio using @vreden/youtube_scraper
       const quality = "128"; // Default quality
